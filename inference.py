@@ -107,48 +107,57 @@ def inference(model, tokenizer, messages, max_new_tokens):
 
 def get_user_input():
     user_input = input("\nYou: ").strip()
-    if user_input.lower() in {"exit", "quit"}:
+    if user_input.lower() == "q":
         print("Exiting interactive chat.")
         sys.exit(0)
     return user_input
 
 
 def interactive_chat(model, tokenizer, messages, max_new_tokens):
-    print("\nEntering interactive chat mode. Type 'exit' to quit.\n")
+    print("\nEntering interactive chat mode. Type 'q' to quit.\n")
 
     if len(messages) == 0 or (len(messages) == 1 and messages[0]["role"] == "system"):
         user_input = get_user_input()
         messages.append({"role": "user", "content": user_input})
 
+    text = tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=True,
+    )
+    input_ids = tokenizer(text, return_tensors="pt").to(model.device)
+
     while True:
-        # Generate model response
-        text = tokenizer.apply_chat_template(
-            messages,
+        print("\nAssistant:", flush=True)
+        output_ids = model.generate(
+            **input_ids,
+            max_new_tokens=max_new_tokens,
+            temperature=0.7,
+            top_p=0.7,
+            top_k=20,
+            repetition_penalty=1.2,
+            streamer=TextStreamer(tokenizer, skip_prompt=True),
+        )
+        updated_context = tokenizer.decode(output_ids[0], skip_special_tokens=False)
+
+        user_input = get_user_input()
+        user_text = tokenizer.apply_chat_template(
+            [{"role": "user", "content": user_input}],
             tokenize=False,
             add_generation_prompt=True,
         )
-        print("\nAssistant:", flush=True)
-        output_ids = model.generate(
-            **tokenizer(text, return_tensors="pt").to(model.device),
-            max_new_tokens=max_new_tokens,
-            temperature=0.3,
-            top_p=0.8,
-            top_k=10,
-            streamer=TextStreamer(tokenizer, skip_prompt=True),
-        )
-        # Get the generated text (last message)
-        _ = tokenizer.decode(output_ids[0], skip_special_tokens=True)
-        # Optionally, you could parse the output to extract only the assistant's reply
-        # Prompt user for next input
-        user_input = get_user_input()
-        messages.append({"role": "user", "content": user_input})
+        input_ids = tokenizer(
+            f"{updated_context}\n{user_text}", return_tensors="pt"
+        ).to(model.device)
 
 
 def main():
     args = parse_args()
     torch_dtype = get_dtype(args.torch_dtype)
+
     model = AutoModelForCausalLM.from_pretrained(
-        args.model_name, torch_dtype=torch_dtype, device_map="auto"
+        args.model_name,
+        torch_dtype=torch_dtype,
     ).to(args.device)
 
     if args.lora_adapter:
@@ -156,32 +165,8 @@ def main():
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name)
     messages = load_messages(args)
-    # If no message_file and no message, fallback to interactive mode
-    if not args.message_file and not args.message:
-        print("No initial message provided. Entering interactive chat mode.")
-        interactive_chat(model, tokenizer, messages, args.max_new_tokens)
-        return
 
-    # Run initial inference
-    inference(model, tokenizer, messages, args.max_new_tokens)
-
-    # Ask user if they want to continue interactively
-    try:
-        while True:
-            user_input = input(
-                "\nYou (type 'exit' to quit, or enter to continue): "
-            ).strip()
-            if user_input.lower() in {"exit", "quit"}:
-                print("Exiting interactive chat.")
-                break
-            if user_input == "":
-                user_input = input("Enter your next message: ").strip()
-            if not user_input:
-                continue
-            messages.append({"role": "user", "content": user_input})
-            inference(model, tokenizer, messages, args.max_new_tokens)
-    except (KeyboardInterrupt, EOFError):
-        print("\nExiting interactive chat.")
+    interactive_chat(model, tokenizer, messages, args.max_new_tokens)
 
 
 if __name__ == "__main__":
