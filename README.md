@@ -20,6 +20,15 @@ Run inference with a model and a JSON file containing messages:
 python inference.py --model_name <model_path_or_name> --message_file messages.json
 ```
 
+### Interactive Chat Mode
+You can chat interactively with the model. After each response, you can enter a new message (including an empty message) and continue the conversation. Type `exit` or `quit` to end the session.
+
+Start interactive mode with no initial message:
+```sh
+python inference.py --model_name <model_path_or_name>
+```
+
+Or, after running with a message or message file, you will be prompted to continue interactively.
 ### With a System Message
 To prepend a system message from a text file:
 ```sh
@@ -46,6 +55,9 @@ The `--message_file` should be a JSON file containing a list of messages, e.g.:
 ]
 ```
 
+## Notes
+ - You can send empty messages (just press Enter) in interactive mode; these will be appended and sent to the model.
+
 ## System Message File
 The `--system_message_file` should be a plain text file. Its content will be prepended as a system message, e.g.:
 ```
@@ -57,5 +69,9 @@ You are a helpful assistant.
 python inference.py --model_name Qwen/Qwen3-1.7B --message_file messages.json --system_message_file system.txt --device cpu
 ```
 
+### Interactive Example
+```sh
+python inference.py --model_name Qwen/Qwen3-1.7B
+```
 ## License
 MIT
