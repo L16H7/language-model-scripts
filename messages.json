@@ -1,0 +1,14 @@
+[
+    {
+        "role": "user",
+        "content": "Hello, how are you?"
+    },
+    {
+        "role": "assistant",
+        "content": "I'm doing well, thank you! How can I assist you today?"
+    },
+    {
+        "role": "user",
+        "content": "What is the capital of France?"
+    }
+]
