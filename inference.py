@@ -89,22 +89,6 @@ def load_messages(args):
     return messages
 
 
-def inference(model, tokenizer, messages, max_new_tokens):
-    text = tokenizer.apply_chat_template(
-        messages,
-        tokenize=False,
-        add_generation_prompt=True,
-    )
-    _ = model.generate(
-        **tokenizer(text, return_tensors="pt").to(model.device),
-        max_new_tokens=max_new_tokens,
-        temperature=0.3,
-        top_p=0.8,
-        top_k=10,
-        streamer=TextStreamer(tokenizer, skip_prompt=True),
-    )
-
-
 def get_user_input():
     user_input = input("\nYou: ").strip()
     if user_input.lower() == "q":
@@ -132,9 +116,9 @@ def interactive_chat(model, tokenizer, messages, max_new_tokens):
         output_ids = model.generate(
             **input_ids,
             max_new_tokens=max_new_tokens,
-            temperature=0.7,
-            top_p=0.7,
-            top_k=20,
+            temperature=0.1,
+            top_p=0.5,
+            top_k=1,
             repetition_penalty=1.2,
             streamer=TextStreamer(tokenizer, skip_prompt=True),
         )
