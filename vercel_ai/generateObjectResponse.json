@@ -1,0 +1,152 @@
+{
+    "choices": [
+        {
+            "finish_reason": "tool_calls",
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": null,
+                "tool_calls": [
+                    {
+                        "type": "function",
+                        "function": {
+                            "name": "json",
+                            "arguments": "{\"names\":[\"Alice\",\"Bob\",\"Charlie\"]}"
+                        },
+                        "id": "85GHe9Fqzb6NIM1AQn4dtJyzJDN3oF6c"
+                    }
+                ]
+            }
+        }
+    ],
+    "created": 1757376050,
+    "model": "localLLM",
+    "system_fingerprint": "b6100-65c797c4",
+    "object": "chat.completion",
+    "usage": {
+        "completion_tokens": 26,
+        "prompt_tokens": 203,
+        "total_tokens": 229
+    },
+    "id": "chatcmpl-Ere2nkCfGck9pvmIndTUkYvstUi4KH4Y",
+    "__verbose": {
+        "index": 0,
+        "content": "<tool_call>\n{\"name\": \"json\", \"arguments\": {\"names\": [\"Alice\", \"Bob\", \"Charlie\"]}}\n</tool_call>",
+        "tokens": [],
+        "id_slot": 0,
+        "stop": true,
+        "model": "localLLM",
+        "tokens_predicted": 26,
+        "tokens_evaluated": 203,
+        "generation_settings": {
+            "n_predict": -1,
+            "seed": 4294967295,
+            "temperature": 0.0,
+            "dynatemp_range": 0.0,
+            "dynatemp_exponent": 1.0,
+            "top_k": 40,
+            "top_p": 0.949999988079071,
+            "min_p": 0.05000000074505806,
+            "top_n_sigma": -1.0,
+            "xtc_probability": 0.0,
+            "xtc_threshold": 0.10000000149011612,
+            "typical_p": 1.0,
+            "repeat_last_n": 64,
+            "repeat_penalty": 1.0,
+            "presence_penalty": 0.0,
+            "frequency_penalty": 0.0,
+            "dry_multiplier": 0.0,
+            "dry_base": 1.75,
+            "dry_allowed_length": 2,
+            "dry_penalty_last_n": 4096,
+            "dry_sequence_breakers": [
+                "\n",
+                ":",
+                "\"",
+                "*"
+            ],
+            "mirostat": 0,
+            "mirostat_tau": 5.0,
+            "mirostat_eta": 0.10000000149011612,
+            "stop": [],
+            "max_tokens": -1,
+            "n_keep": 0,
+            "n_discard": 0,
+            "ignore_eos": false,
+            "stream": false,
+            "logit_bias": [],
+            "n_probs": 0,
+            "min_keep": 0,
+            "grammar": "any-tool-call ::= ( json-call ) space\nchar ::= [^\"\\\\\\x7F\\x00-\\x1F] | [\\\\] ([\"\\\\bfnrt] | \"u\" [0-9a-fA-F]{4})\njson-args ::= \"{\" space json-args-names-kv \"}\" space\njson-args-names ::= \"[\" space string (\",\" space string){2,2} \"]\" space\njson-args-names-kv ::= \"\\\"names\\\"\" space \":\" space json-args-names\njson-call ::= \"{\" space json-call-name-kv \",\" space json-call-arguments-kv \"}\" space\njson-call-arguments ::= \"{\" space json-call-arguments-names-kv \"}\" space\njson-call-arguments-kv ::= \"\\\"arguments\\\"\" space \":\" space json-call-arguments\njson-call-arguments-names ::= \"[\" space string (\",\" space string){2,2} \"]\" space\njson-call-arguments-names-kv ::= \"\\\"names\\\"\" space \":\" space json-call-arguments-names\njson-call-name ::= \"\\\"json\\\"\" space\njson-call-name-kv ::= \"\\\"name\\\"\" space \":\" space json-call-name\njson-function-tag ::= \"<function\" ( \"=json\" | \" name=\\\"json\\\"\" ) \">\" space json-args \"</function>\" space\nroot ::= tool-call\nspace ::= | \" \" | \"\\n\"{1,2} [ \\t]{0,20}\nstring ::= \"\\\"\" char* \"\\\"\" space\ntool-call ::= json-function-tag | wrappable-tool-call | ( \"```\\n\" | \"```json\\n\" | \"```xml\\n\" ) space wrappable-tool-call space \"```\" space \nwrappable-tool-call ::= ( any-tool-call | \"<tool_call>\" space any-tool-call \"</tool_call>\" | \"<function_call>\" space any-tool-call \"</function_call>\" | \"<response>\"  space any-tool-call \"</response>\" | \"<tools>\"     space any-tool-call \"</tools>\" | \"<json>\"      space any-tool-call \"</json>\" | \"<xml>\"      space any-tool-call \"</xml>\" | \"<JSON>\"      space any-tool-call \"</JSON>\" ) space\n",
+            "grammar_lazy": true,
+            "grammar_triggers": [
+                {
+                    "type": 1,
+                    "value": "<function=json>"
+                },
+                {
+                    "type": 2,
+                    "value": "<function\\s+name\\s*=\\s*\"json\""
+                },
+                {
+                    "type": 3,
+                    "value": "(?:<think>[\\s\\S]*?</think>\\s*)?(\\s*(?:<tool_call>|<function|(?:```(?:json|xml)?\n\\s*)?(?:<function_call>|<tools>|<xml><json>|<response>)?\\s*\\{\\s*\"name\"\\s*:\\s*\"(?:json)\"))[\\s\\S]*"
+                }
+            ],
+            "preserved_tokens": [
+                73594,
+                151657,
+                151658,
+                151667,
+                151668
+            ],
+            "chat_format": "Hermes 2 Pro",
+            "reasoning_format": "auto",
+            "reasoning_in_content": false,
+            "thinking_forced_open": false,
+            "samplers": [
+                "penalties",
+                "dry",
+                "top_n_sigma",
+                "top_k",
+                "typ_p",
+                "top_p",
+                "min_p",
+                "xtc",
+                "temperature"
+            ],
+            "speculative.n_max": 16,
+            "speculative.n_min": 0,
+            "speculative.p_min": 0.75,
+            "timings_per_token": false,
+            "post_sampling_probs": false,
+            "lora": []
+        },
+        "prompt": "<|im_start|>system\n# Tools\n\nYou may call one or more functions to assist with the user query.\n\nYou are provided with function signatures within <tools></tools> XML tags:\n<tools>\n{\"type\": \"function\", \"function\": {\"name\": \"json\", \"description\": \"Respond with a JSON object.\", \"parameters\": {\"type\": \"object\", \"properties\": {\"names\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}, \"minItems\": 3, \"maxItems\": 3, \"description\": \"A list of three names\"}}, \"required\": [\"names\"], \"additionalProperties\": false, \"$schema\": \"http://json-schema.org/draft-07/schema#\"}}}\n</tools>\n\nFor each function call, return a json object with function name and arguments within <tool_call></tool_call> XML tags:\n<tool_call>\n{\"name\": <function-name>, \"arguments\": <args-json-object>}\n</tool_call><|im_end|>\n<|im_start|>user\nGenerate three names<|im_end|>\n<|im_start|>assistant\n",
+        "has_new_line": true,
+        "truncated": false,
+        "stop_type": "eos",
+        "stopping_word": "",
+        "tokens_cached": 228,
+        "timings": {
+            "prompt_n": 203,
+            "prompt_ms": 459.173,
+            "prompt_per_token_ms": 2.261935960591133,
+            "prompt_per_second": 442.0991652383742,
+            "predicted_n": 26,
+            "predicted_ms": 1585.781,
+            "predicted_per_token_ms": 60.99157692307692,
+            "predicted_per_second": 16.395706595046857
+        }
+    },
+    "timings": {
+        "prompt_n": 203,
+        "prompt_ms": 459.173,
+        "prompt_per_token_ms": 2.261935960591133,
+        "prompt_per_second": 442.0991652383742,
+        "predicted_n": 26,
+        "predicted_ms": 1585.781,
+        "predicted_per_token_ms": 60.99157692307692,
+        "predicted_per_second": 16.395706595046857
+    }
+}

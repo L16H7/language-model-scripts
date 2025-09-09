@@ -1,0 +1,44 @@
+{
+    "model": "localLLM",
+    "temperature": 0,
+    "messages": [
+        {
+            "role": "user",
+            "content": "Generate three names"
+        }
+    ],
+    "tool_choice": {
+        "type": "function",
+        "function": {
+            "name": "json"
+        }
+    },
+    "tools": [
+        {
+            "type": "function",
+            "function": {
+                "name": "json",
+                "description": "Respond with a JSON object.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "names": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "minItems": 3,
+                            "maxItems": 3,
+                            "description": "A list of three names"
+                        }
+                    },
+                    "required": [
+                        "names"
+                    ],
+                    "additionalProperties": false,
+                    "$schema": "http://json-schema.org/draft-07/schema#"
+                }
+            }
+        }
+    ]
+}
